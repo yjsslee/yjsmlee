@@ -4,7 +4,7 @@ import pandas as pd
 
 st.set_page_config(page_title="키움 모의투자 보유종목 수익률", page_icon="📈")
 
-st.title("📈 키움증권 모의투자 보유종목 수익률")```python
+st.title("📈 키움증권 모의투자 보유종목 수익률")
 import streamlit as st
 import requests
 import pandas as pd
