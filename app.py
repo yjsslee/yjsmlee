@@ -8,6 +8,86 @@ import streamlit as st
 
 st.set_page_config(page_title="이유진의 주식분석 대시보드", page_icon="📈", layout="wide")
 
+# ── 고급스러운 파스텔 테마 ──────────────────────────────────────────────
+st.markdown("""
+<style>
+    .stApp {
+        background: linear-gradient(135deg, #F8F5FF 0%, #F4FAF8 48%, #FFF8F0 100%);
+        color: #303548;
+    }
+    .main .block-container {
+        padding-top: 2.2rem;
+        padding-bottom: 2rem;
+        max-width: 1450px;
+    }
+    h1, h2, h3 {
+        color: #303548 !important;
+        letter-spacing: -0.03em;
+    }
+    h1 { font-weight: 750 !important; }
+    h2, h3 { font-weight: 650 !important; }
+    .stCaption, .stMarkdown p { color: #667085; }
+
+    /* Metric 카드 */
+    div[data-testid="stMetric"] {
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(185, 178, 214, 0.42);
+        border-radius: 18px;
+        padding: 16px 18px;
+        box-shadow: 0 6px 20px rgba(73, 67, 104, 0.07);
+    }
+    div[data-testid="stMetricLabel"] { color: #73788A !important; }
+    div[data-testid="stMetricValue"] { color: #34394D !important; font-weight: 700; }
+
+    /* 사이드바 */
+    section[data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #F0ECFA 0%, #EAF5F2 100%);
+        border-right: 1px solid #DDD8EA;
+    }
+    section[data-testid="stSidebar"] h2,
+    section[data-testid="stSidebar"] h3,
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] label { color: #41465A !important; }
+
+    /* 입력창 */
+    div[data-baseweb="input"] > div,
+    div[data-baseweb="select"] > div {
+        background-color: rgba(255,255,255,0.86);
+        border-color: #D5D0E2;
+        border-radius: 12px;
+    }
+
+    /* 버튼 */
+    .stButton > button {
+        background: #DCCFF5;
+        color: #38344A;
+        border: 1px solid #C9B9EA;
+        border-radius: 12px;
+        font-weight: 650;
+        transition: all 0.2s ease;
+    }
+    .stButton > button:hover {
+        background: #CFC0EE;
+        border-color: #B9A7E2;
+        color: #29253A;
+    }
+
+    /* 표 */
+    div[data-testid="stDataFrame"] {
+        border: 1px solid #DDD8EA;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 5px 18px rgba(73, 67, 104, 0.05);
+    }
+
+    /* 알림 박스 */
+    div[data-testid="stAlert"] { border-radius: 14px; }
+
+    /* 구분선 */
+    hr { border-color: #DDD8EA; }
+</style>
+""", unsafe_allow_html=True)
+
 KIWOOM_MOCK_URL = "https://mockapi.kiwoom.com"
 KRX_URL = "https://data-dbg.krx.co.kr/svc/apis"
 
@@ -18,7 +98,6 @@ def secret(name: str) -> str:
     except Exception:
         value = ""
     return str(value).strip() if value else ""
-
 
 KRX_API_KEY = secret("KRX_API_KEY")
 KIWOOM_APP_KEY = secret("KIWOOM_APP_KEY")
