@@ -6,7 +6,7 @@ import pandas as pd
 import requests
 import streamlit as st
 
-st.set_page_config(page_title="나의 주식분석 대시보드", page_icon="📈", layout="wide")
+st.set_page_config(page_title="이유진의 주식분석 대시보드", page_icon="📈", layout="wide")
 
 KIWOOM_MOCK_URL = "https://mockapi.kiwoom.com"
 KRX_URL = "https://data-dbg.krx.co.kr/svc/apis"
@@ -56,17 +56,7 @@ def require_secrets() -> bool:
         missing.append("KIWOOM_APP_SECRET")
     if missing:
         st.error("API 인증정보가 없습니다: " + ", ".join(missing))
-        st.markdown("""
-**Streamlit Community Cloud → 앱 Settings → Secrets**에 아래 형식으로 입력하세요.
-
-```toml
-KRX_API_KEY = \"여기에_KRX_인증키\"
-KIWOOM_APP_KEY = \"여기에_키움_모의투자_App_Key\"
-KIWOOM_APP_SECRET = \"여기에_키움_모의투자_App_Secret\"
-```
-
-GitHub 저장소에는 이 값을 저장하지 않습니다.
-""")
+        st.markdown("**Streamlit Community Cloud → 앱 Settings → Secrets**에 API 인증정보를 입력하세요.")
         return False
     return True
 
@@ -179,7 +169,7 @@ def latest_krx_row(df: pd.DataFrame, preferred_name: str) -> pd.Series | None:
     return subset.sort_values("date").iloc[-1]
 
 
-st.title("📈 나의 주식분석 대시보드")
+st.title("📈 이유진의 주식분석 대시보드")
 st.caption("KRX 시장 데이터 + 키움증권 모의투자 계좌를 한 화면에서 확인합니다. 조회 전용 버전입니다.")
 
 if not require_secrets():
@@ -204,7 +194,6 @@ except Exception as exc:
     st.error(f"키움 API 인증 실패: {exc}")
     st.stop()
 
-# ── 시장 ───────────────────────────────────────────────────────────────
 today = dt.date.today().strftime("%Y%m%d")
 try:
     kospi_df = krx_index(KRX_API_KEY, "kospi_dd_trd", today, 20)
@@ -231,7 +220,6 @@ if kospi is not None:
 if kosdaq is not None:
     c4.metric("KOSDAQ 거래대금", money(kosdaq["ACC_TRDVAL"]))
 
-# ── 계좌 ───────────────────────────────────────────────────────────────
 st.subheader("내 모의투자 계좌")
 try:
     account_no = get_account_number(token)
@@ -242,7 +230,6 @@ try:
     orderable_amt = clean_number(deposit.get("ord_alow_amt") or deposit.get("ord_alowa"))
     total_assets = clean_number(evaluation.get("prsm_dpst_aset_amt") or evaluation.get("aset_evlt_amt"))
     eval_amt = clean_number(evaluation.get("tot_est_amt"))
-    profit_amt = clean_number(evaluation.get("lspft"))
     profit_rt = clean_number(evaluation.get("lspft_rt"))
 
     a1, a2, a3, a4, a5 = st.columns(5)
@@ -278,14 +265,12 @@ try:
 except Exception as exc:
     st.error(f"키움 계좌 조회 실패: {exc}")
 
-# ── 종목 분석 ─────────────────────────────────────────────────────────
 st.subheader("종목 분석")
 if stock_code and len(stock_code) == 6 and stock_code.isdigit():
     try:
         info = get_stock_info(token, stock_code)
         name = info.get("stk_nm", stock_code)
         current = clean_number(info.get("cur_prc"))
-        change = clean_number(info.get("base_comp"))
         change_pct = clean_number(info.get("flu_rt") or info.get("base_comp_chgr"))
         volume = clean_number(info.get("trde_qty"))
 
@@ -302,7 +287,6 @@ if stock_code and len(stock_code) == 6 and stock_code.isdigit():
 else:
     st.info("사이드바에 6자리 종목코드를 입력하세요.")
 
-# ── 시장 차트 ─────────────────────────────────────────────────────────
 left, right = st.columns(2)
 with left:
     st.markdown("**KOSPI 최근 데이터**")
@@ -315,4 +299,4 @@ with right:
         chart = kosdaq_df[["date", "close"]].drop_duplicates("date").set_index("date")
         st.line_chart(chart)
 
-st.caption("※ 이 앱은 현재 조회 기능만 제공합니다. 실제 주문 API는 포함하지 않았습니다. 키움 모의투자 API는 실전과 별도 인증정보를 사용하며, 모의투자 환경에서 충분히 테스트한 뒤 실전 적용을 검토하세요.")
+st.caption("※ 이 앱은 현재 조회 기능만 제공합니다. 실제 주문 API는 포함하지 않았습니다.")
