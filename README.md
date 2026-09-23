@@ -1,2 +1,0 @@
-# yjsmlee
-my daughter
