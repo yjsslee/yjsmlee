@@ -7,7 +7,7 @@ import requests
 import streamlit as st
 
 st.set_page_config(
-    page_title="키움 모의투자 보유종목 분석",
+    page_title="이유진의 키움 모의투자 보유종목 분석",
     page_icon="📊",
     layout="wide",
 )
