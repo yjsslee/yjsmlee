@@ -248,7 +248,7 @@ section[data-testid="stSidebar"] { background:linear-gradient(180deg,#F0ECFA 0%,
 </style>
 """, unsafe_allow_html=True)
 
-st.title("📊 키움 모의투자 보유종목 상세조회")
+st.title("📊 이유진의 키움 모의투자 보유종목 상세조회")
 st.caption("보유종목의 계좌정보·종목정보·일봉차트를 키움 REST API에서 조회합니다. 조회 전용 프로그램이며 주문 기능은 포함하지 않습니다.")
 
 if not APP_KEY or not APP_SECRET:
